@@ -430,7 +430,6 @@ li>.menu__container>.grid__controling .control_center--grid {
 }
 
 .menu__container>.grid__controling input[type="range"] {
-    appearance: none;
     -webkit-appearance: none;
 
     outline: 0;

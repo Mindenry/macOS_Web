@@ -12,11 +12,6 @@ var container = document.querySelector(".container__Window");
 var deleting = document.querySelector(".deleting");
 var full = document.querySelector(".full");
 var fullnote = document.querySelector(".full-note");
-var finder = document.querySelector(".finder");
-var close_finder = document.querySelector(".close-finder");
-var full_finder = document.querySelector(".full-finder");
-var backfull_finder = document.querySelector(".backfull-finder");
-var open_finder = document.querySelector(".icon:nth-child(1)"); // Finder is 1st icon
 var launchpad = document.querySelector(".launchpad");
 var launchpad_searchbox = document.querySelector(".launchpad .searchbox");
 var launchpad_app_container = document.querySelector(".Apps-container");
@@ -139,37 +134,17 @@ function open_window(open, point, appName) {
 
 // Launchpad function start
 function handleOpenLaunching() {
-    launchpad.classList.toggle("active");
-    
-    if (launchpad.classList.contains("active")) {
+    if (launchpad.style.display === "none") {
+        launchpad.style.display = "block";
         navbar.style.display = "none";
         point_launchpad.style.display = "block";
     } else {
+        launchpad.style.display = "none";
         navbar.style.display = "flex";
         point_launchpad.style.display = "none";
     }
-    container.style.display = launchpad.classList.contains("active") ? "none" : "flex";
+    container.style.display = "none";
 }
-
-// Wallpaper Changer
-const wallpapers = [
-    "url('/assets/background/big-sur-dark.jpg')", // Default
-    "url('https://4kwallpapers.com/images/walls/thumbs_3t/8290.jpg')", // Monterey
-    "url('https://4kwallpapers.com/images/walls/thumbs_3t/11545.jpg')", // Sonoma
-    "url('https://images.unsplash.com/photo-1477346611705-65d1883cee1e?auto=format&fit=crop&w=2000&q=80')", // Abstract Mountains
-    "url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=80')" // Yosemite
-];
-let currentWallpaperIndex = 0;
-
-const changeWallpaperBtn = document.querySelector("#contextMenu li:nth-child(2) button:nth-child(2)");
-if(changeWallpaperBtn) {
-    changeWallpaperBtn.addEventListener("click", () => {
-        currentWallpaperIndex = (currentWallpaperIndex + 1) % wallpapers.length;
-        document.body.style.backgroundImage = wallpapers[currentWallpaperIndex];
-        hideMenu();
-    });
-}
-
 
 function handleLaunchpadSearch(e) {
     for (let app of launchpad_app_container.children) {
@@ -242,39 +217,9 @@ closecal.addEventListener("click", () =>
 opencalculator_lunchpad.addEventListener("click", handleOpenCal_lunchpad);
 open_spotlight.addEventListener("click", handleopen_spotlight);
 launchpad_searchbox.addEventListener("input", handleLaunchpadSearch);
-launchpad_searchbox.addEventListener("input", handleLaunchpadSearch);
 clockWrapper.addEventListener("click", () => {
     widgetsPanel.classList.toggle("open");
 });
-
-// Finder Integration
-if(open_finder) {
-    open_finder.addEventListener("click", () => {
-        // Inject content if empty
-        const container = document.getElementById("finder-content-container");
-        if(container && !container.innerHTML.trim()) {
-             if(typeof createFinderContent === 'function') {
-                 container.innerHTML = createFinderContent();
-             }
-        }
-        
-        // Open Window logic ( reusing open_window if possible, but it expects appName elem which we might likely need to mock or just manual show)
-        navbar.style.display = "flex";
-        finder.style.display = "block";
-        document.querySelector(".container__Window").style.display = "flex";
-        
-        // Bring to front
-        finder.trigger('mousedown'); // Will trigger the z-index logic from jquery
-    });
-}
-
-if(close_finder) {
-    close_finder.addEventListener("click", () => {
-        finder.style.display = "none";
-    });
-}
-if(full_finder) full_finder.addEventListener("click", () => handleFullScreen(finder));
-if(backfull_finder) backfull_finder.addEventListener("click", () => handleMinimize(finder));
 
 //calculator code
 // select all the buttons
@@ -354,92 +299,14 @@ function calculate(value) {
     }
 }
 
-// Dock Magnification
-const dock = document.querySelector(".dock");
-const dockIcons = document.querySelectorAll(".dock .icon img");
-
-dock.addEventListener("mousemove", (e) => {
-    // Check if mouse is within the dock's vertical bounds roughly
-    // We can rely on the event firing only when hovering the dock container
-    
-    // Scale factor settings
-    const maxScale = 1.5;
-    const minScale = 1;
-    const range = 150; // Distance of influence
-
-    dockIcons.forEach((icon) => {
-        // Get the center X of the icon
-        const rect = icon.getBoundingClientRect();
-        const iconCenterX = rect.left + rect.width / 2;
-        
-        // Calculate distance from mouse X
-        const distance = Math.abs(e.clientX - iconCenterX);
-        
-        // Calculate scale based on distance
-        let scale = minScale;
-        if (distance < range) {
-             const scaleDifference = maxScale - minScale;
-             // Gaussian-like curve or Cosine interpolation for smoothness
-             // Using simple cosine interpolation here for that "Apple" feel
-             const normalizedDistance = distance / range;
-             const interpolation = Math.cos(normalizedDistance * Math.PI / 2);
-             scale = minScale + scaleDifference * interpolation;
-        }
-        
-        // Apply transform
-        // We set the transform on the IMG, not the button, to avoid layout jitter if possible,
-        // or we need to ensure the layout handles width changes if we want true "fish-eye".
-        // The requester wants "Advance" so let's try to mimic the width expansion too if structure allows.
-        // However, changing width in flexbox is smoother than transform scale for layout displacement.
-        
-        // For now, let's stick to transform scale on the image as it's safer for layout stability,
-        // but to make it space out neighbors, we actually need to effect the width.
-        // Let's try width manipulation for the container button or image.
-        
-        icon.style.width = `${3.6 * scale}rem`; // Base width is 3.6rem from CSS
-        icon.style.marginBottom = `${(scale - 1) * 30}px`; // Push up slightly? No, margin handled by alignment.
-        // Actually the docker is flex-end or center?
-        // CSS says: align-items: center; and bottom: 0%;
-        // We might need to adjust margins. 
-    });
-});
-
-dock.addEventListener("mouseleave", () => {
-    dockIcons.forEach((icon) => {
-        icon.style.width = "3.6rem";
-        icon.style.marginBottom = "0";
-    });
-});
-
-// Remove existing hover effects that might conflict
-// We will handle this in CSS by removing the specific hover selectors or overriding them.
-
-
-//App dragable & resizable & Focus
-let highestZ = 10;
-
+//App dragable
 $(function () {
-    const windows = $(".window, .calculator, .spotlight_serach");
-    
-    windows.draggable({
-        handle: ".window__taskbar, .calculator__top",
-        start: function() {
-            bringToFront($(this));
-        }
-    }).resizable({
-        minHeight: 200,
-        minWidth: 300,
-        handles: "n, e, s, w, ne, se, sw, nw"
-    });
-
-    windows.on("mousedown", function() {
-        bringToFront($(this));
-    });
-
-    function bringToFront(element) {
-        highestZ++;
-        element.css("z-index", highestZ);
-    }
+    $(".terminal").draggable();
+    $(".note").draggable();
+    $(".calculator").draggable();
+    $(".Vscode").draggable();
+    $(".spotlight_serach").draggable();
+    $(".maps").draggable();
 });
 //date and time
 var d = new Date();
