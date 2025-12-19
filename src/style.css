@@ -1479,3 +1479,289 @@ li>.menu__container>.grid__controling .control_center--grid {
 .widgets-panel__calendar li span:first-child {
     font-weight: bold;
 }
+
+/* Boot Screen */
+#boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #000000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 99999;
+    transition: opacity 0.5s ease-out;
+}
+
+#boot-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#boot-logo {
+    width: 90px;
+    height: auto;
+    margin-bottom: 50px;
+}
+
+#boot-loader {
+    width: 200px;
+    height: 6px;
+    background-color: #333;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+#boot-progress {
+    height: 100%;
+    width: 0%;
+    background-color: #fff;
+    border-radius: 10px;
+    transition: width 0.1s linear;
+}
+
+/* Login Screen */
+#login-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    /* Use the same background as desktop but we'll apply blur via backdrop-filter if possible, 
+       or just re-apply the image with blur */
+    background: url("/assets/background/big-sur-dark.jpg") no-repeat center center/cover;
+    z-index: 99990;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.7s ease-in-out, transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Create a blur overlay */
+#login-screen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    filter: blur(20px);
+    transform: scale(1.05);
+    /* Prevent blurred edges */
+    z-index: -1;
+}
+
+/* Darken overlay */
+#login-screen::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.2);
+    z-index: -1;
+}
+
+#login-screen.visible {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+}
+
+#login-screen.fade-out {
+    opacity: 0;
+    transform: scale(1.1);
+    /* Slight zoom in effect like real Mac */
+    filter: blur(10px);
+    pointer-events: none;
+}
+
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 40px;
+    z-index: 2;
+    animation: fadeIn 1s ease-out;
+}
+
+.user-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-name {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.password-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.password-input {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    padding-right: 30px;
+    color: #fff;
+    font-size: 13px;
+    width: 140px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.password-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.password-input:focus {
+    width: 180px;
+    background: rgba(255, 255, 255, 0.35);
+    outline: none;
+}
+
+.login-arrow {
+    position: absolute;
+    right: 18px;
+    /* Start hidden/inside */
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s;
+    font-size: 18px;
+    pointer-events: none;
+}
+
+/* Show arrow when there is input (handled by JS class) or simple focus trick */
+.password-input:not(:placeholder-shown)+.login-arrow,
+.password-input:focus:not(:placeholder-shown)+.login-arrow {
+    opacity: 1;
+    visibility: visible;
+    right: 8px;
+    pointer-events: all;
+}
+
+.login-message {
+    height: 20px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: center;
+    opacity: 0;
+}
+
+.login-message.show {
+    opacity: 1;
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+.bottom-actions {
+    position: absolute;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 2;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 30px;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.action-btn:hover {
+    color: #fff;
+}
+
+.action-icon {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+    transition: background 0.2s;
+}
+
+.action-btn:hover .action-icon {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.action-label {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.cancel-btn {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.cancel-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 20px;
+}

@@ -458,3 +458,82 @@ batteryButton.addEventListener("click", () => {
     batteryButton.classList.toggle("selected");
 });
 /********** End Battery **********/
+document.addEventListener('DOMContentLoaded', () => {
+    const bootScreen = document.getElementById('boot-screen');
+    const bootProgress = document.getElementById('boot-progress');
+    const loginScreen = document.getElementById('login-screen');
+    const desktopContent = document.getElementById('desktop-content');
+    const passwordInput = document.getElementById('password-input');
+    const loginArrow = document.querySelector('.login-arrow');
+    const loginMessage = document.querySelector('.login-message');
+    
+    // Initial State
+    // Desktop hidden via style in HTML
+    
+    // Start Boot Sequence
+    setTimeout(() => {
+        // Start progress bar
+        bootProgress.style.width = '100%';
+    }, 500);
+
+    // Boot complete -> Transition to Login
+    setTimeout(() => {
+        bootScreen.classList.add('hidden'); // Fade out boot
+        
+        // Show Login Screen
+        loginScreen.classList.remove('hidden');
+        loginScreen.style.opacity = '1'; // Override inline style
+        loginScreen.classList.add('visible');
+
+        setTimeout(() => {
+            bootScreen.style.display = 'none'; // Remove from flow
+            passwordInput.focus();
+        }, 500);
+    }, 3500); // 3s load + 0.5s delay
+
+    // Login Logic
+    function attemptLogin() {
+        const password = passwordInput.value;
+        if (password.length >= 0) { // Accept empty for simulator or require something? Let's allow empty or not. Real mac allows distinct flows. Let's just login.
+             // Simulate processing
+             passLogin();
+        }
+    }
+
+    function passLogin() {
+        loginScreen.classList.add('fade-out');
+        
+        // Show desktop underlying
+        desktopContent.style.display = 'block'; // Make it part of DOM
+        // It might need opacity transition if we want it smooth, but 'fade-out' of login screen reveals it
+        
+        setTimeout(() => {
+            loginScreen.style.display = 'none';
+        }, 800);
+    }
+
+    // Input Listeners
+    passwordInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            attemptLogin();
+        }
+    });
+
+    loginArrow.addEventListener('click', attemptLogin);
+
+    // Action Buttons logic
+    document.querySelectorAll('.action-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const action = e.currentTarget.querySelector('.action-label').textContent;
+            if (action === 'Restart') {
+                window.location.reload();
+            } else if (action === 'Shut Down') {
+                document.body.innerHTML = '<div style="background:black;height:100vh;width:100vw;display:flex;align-items:center;justify-content:center;"><h1 style="color:white;font-family:sans-serif;">Shut Down</h1></div>';
+                setTimeout(() => window.close(), 2000); 
+            } else if (action === 'Sleep') {
+                loginScreen.style.filter = 'brightness(0)';
+                // Simple simulation
+            }
+        });
+    });
+});
