@@ -1,0 +1,77 @@
+/* Advanced Glassmorphism & Visual Polish */
+
+:root {
+    --glass-blur: blur(20px);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --dock-bg: rgba(255, 255, 255, 0.2);
+    --menu-bg: rgba(0, 0, 0, 0.2);
+    --window-bg: rgba(255, 255, 255, 0.7);
+}
+
+/* Navbar (Menu Bar) */
+.navbar {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar li:hover ul {
+    background: rgba(43, 43, 43, 0.6) !important;
+    backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Dock */
+.dock {
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+    height: 70px !important;
+    /* Increased height for magnification room */
+    padding-bottom: 5px !important;
+}
+
+/* Windows */
+.window {
+    background: rgba(30, 30, 30, 0.85) !important;
+    /* Dark mode style base */
+    backdrop-filter: blur(30px) !important;
+    -webkit-backdrop-filter: blur(30px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6) !important;
+    border-radius: 12px !important;
+}
+
+.window__taskbar {
+    background: transparent !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.window__taskbar--content h2 {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+/* Control Center */
+li>.menu__container {
+    background: rgba(30, 30, 30, 0.6) !important;
+    backdrop-filter: blur(40px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5) !important;
+}
+
+.control_center--grid {
+    background: rgba(200, 200, 200, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Typography */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif !important;
+}

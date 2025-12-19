@@ -13,11 +13,58 @@
     <script src="code.jqurey.com/ui/1.12.1/jquery-ui.js"></script>
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/boot.css">
+    <link rel="stylesheet" href="/src/login.css">
+    <link rel="stylesheet" href="/src/polish.css">
+    <link rel="stylesheet" href="/src/finder.css">
+    <link rel="stylesheet" href="/src/launchpad.css">
+    <link rel="stylesheet" href="/src/control_center.css">
     <title>macOS Web</title>
 
 </head>
 
-<body onload="digi(), calculateBattery()">
+<body>
+    <div class="boot-screen">
+        <div class="boot-content">
+            <img src="/assets/icon/apple-white.png" alt="Apple Logo" class="boot-logo">
+            <div class="progress-bar-container">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div class="login-screen">
+        <div class="login-content">
+            <div class="user-avatar"></div>
+            <div class="user-name">MindEiei</div>
+            <div class="password-container">
+                <input type="password" class="password-input" placeholder="Enter Password">
+                <button class="enter-arrow">
+                    <span class="material-icons-round">arrow_forward</span>
+                </button>
+            </div>
+            <p style="color: rgba(255,255,255,0.5); font-size: 11px; margin-top: 10px;">Hint: Press Enter</p>
+        </div>
+
+        <div class="login-footer">
+            <div class="login-actions">
+               <div class="login-action-btn">
+                   <span class="material-icons-round">bedtime</span>
+                   <span>Sleep</span>
+               </div>
+               <div class="login-action-btn">
+                    <span class="material-icons-round">restart_alt</span>
+                    <span>Restart</span>
+               </div>
+               <div class="login-action-btn">
+                    <span class="material-icons-round">power_settings_new</span>
+                    <span>Shut Down</span>
+               </div>
+            </div>
+        </div>
+    </div>
+
     <div class="navbar">
         <ul>
             <li class="leftLi logo">
@@ -442,6 +489,23 @@
         </div>
     </div>
     <div class="container__Window">
+        <!-- Finder Window -->
+        <div class="window finder" style="width: 800px; height: 500px;">
+            <div class="window__taskbar">
+                <div class="window__taskbar--actions">
+                    <button class="close-finder"></button>
+                    <button class="backfull-finder"></button>
+                    <button class="full-finder"></button>
+                </div>
+                <div class="window__taskbar--content">
+                    <h2>Finder</h2>
+                </div>
+            </div>
+            <div class="content" id="finder-content-container">
+               <!-- Content injected by JS -->
+            </div>
+        </div>
+
         <div class="window terminal">
             <div class="window__taskbar">
                 <div class="window__taskbar--actions">
@@ -635,6 +699,8 @@
         <input type="search" placeholder="Spotlight Search">
     </div>
     <script src="/src/script.js"></script>
+    <script src="/src/boot.js"></script>
+    <script src="/src/finder_mock.js"></script>
     <script src="/src/app.js"></script>
 
 </body>
